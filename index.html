@@ -145,7 +145,7 @@
     </style>
 </head>
 
-<body onload="alert('Enter location first')">
+<body onload="alert('Enter location')">
     <div class="container">
         <div class="header">
             <div class="search">
@@ -155,10 +155,10 @@
         </div>
         <div class="w-box">
             <p id="temperature">0<sup>°C</sup></p>
-            <p class="des" id="Descr">light rain</p>
+            <p class="des" id="Descr">Clear</p>
         </div>
         <div class="weather-body">
-            <img src="./Images/cloud.png" id="weather-img">
+            <img src="./Images/clear.png" id="weather-img">
             <div class="w-details">
                 <div class="humidity">
                     <img src="./Images/humidity.png">
@@ -195,7 +195,7 @@
 
             const weatherData = await fetch(`${url}`).then(response => response.json());
 
-            if(weatherData.cod === `404`){
+            if (weatherData.cod === `404`) {
                 alert("Sorry, Location not found ⚠");
                 return;
             }
@@ -205,19 +205,19 @@
             humidity.innerHTML = `${weatherData.main.humidity}%`;
             windSpeed.innerHTML = `${weatherData.wind.speed} Km/H`;
 
-            if(weatherData.weather[0].main == 'Clouds'){
+            if (weatherData.weather[0].main == 'Clouds') {
                 weatherImg.src = "./Images/cloud.png"
             }
-            else if(weatherData.weather[0].main == 'Clear'){
+            else if (weatherData.weather[0].main == 'Clear') {
                 weatherImg.src = "./Images/clear.png"
             }
-            else if(weatherData.weather[0].main == 'Rain'){
+            else if (weatherData.weather[0].main == 'Rain') {
                 weatherImg.src = "./Images/rain.png"
             }
-            else if(weatherData.weather[0].main == 'Mist'){
+            else if (weatherData.weather[0].main == 'Mist') {
                 weatherImg.src = "./Images/mist.png"
             }
-            else if(weatherData.weather[0].main == 'Snow'){
+            else if (weatherData.weather[0].main == 'Snow') {
                 weatherImg.src = "./Images/snow.png"
             }
         }
