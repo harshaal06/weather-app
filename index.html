@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            box-sizing: border-box;
+            border: none;
+        }
+
+        body {
+            height: 100vh;
+            background-repeat: no-repeat;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(./images/back-img.jpg );
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 500px;
+            height: max-content;
+            padding: 28px;
+            background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), transparent;
+            border-radius: 12px;
+        }
+
+        .search {
+            width: 95%;
+            height: min-content;
+            display: flex;
+            margin: 0 auto;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search input {
+            width: 84%;
+            font-size: 20px;
+            text-transform: capitalize;
+            color: #000;
+            background-color: #e6f5fb;
+            padding: 12px 16px;
+            border-radius: 25px;
+        }
+
+        .search input::placeholder {
+            color: #000;
+        }
+
+        .search button {
+            width: 46px;
+            height: 46px;
+            background-color: #e6f5fb;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .search button:hover {
+            color: #fff;
+            background-color: #ababab;
+        }
+
+        .weather-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -50px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .weather-body img {
+            width: 50%;
+        }
+
+        .w-box {
+            margin: 30px;
+        }
+
+        .w-box #temperature {
+            font-size: 80px;
+            font-weight: 800;
+            position: relative;
+        }
+
+        .w-box #temperature sup {
+            font-size: 40px;
+            position: absolute;
+            font-weight: 600;
+        }
+
+        .w-box .des {
+            font-size: 30px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .w-details {
+            width: 100%;
+            margin-left: 50px;
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .humidity,
+        .wind {
+            display: flex;
+            align-items: center;
+        }
+
+        .humidity {
+            margin-bottom: 20px;
+        }
+
+        .wind {
+            margin-top: 40px;
+        }
+
+        .w-details img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .w-details .text {
+            margin-left: 10px;
+            font-size: 17px;
+        }
+
+        .text span {
+            font-size: 21px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body onload="alert('Enter location first')">
+    <div class="container">
+        <div class="header">
+            <div class="search">
+                <input type="text" placeholder="Enter your location" id="input-box">
+                <button class="fa-solid fa-magnifying-glass" onclick="checkWeather()"></button>
+            </div>
+        </div>
+        <div class="w-box">
+            <p id="temperature">0<sup>°C</sup></p>
+            <p class="des" id="Descr">light rain</p>
+        </div>
+        <div class="weather-body">
+            <img src="./Images/cloud.png" id="weather-img">
+            <div class="w-details">
+                <div class="humidity">
+                    <img src="./Images/humidity.png">
+                    <div class="text">
+                        <span id="humidity">0%</span>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="wind">
+                    <img src="./Images/wind.png">
+                    <div class="text">
+                        <span id="wind-speed">0 Km/H</span>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        const inputBox = document.getElementById("input-box");
+        const weatherImg = document.getElementById("weather-img");
+        const temperature = document.getElementById("temperature");
+        const descr = document.getElementById("Descr");
+        const humidity = document.getElementById("humidity");
+        const windSpeed = document.getElementById("wind-speed");
+
+        async function checkWeather() {
+            const city = inputBox.value;
+            const apiKey = "f483903fb5eeb5b832a983221df22f50";
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+            const weatherData = await fetch(`${url}`).then(response => response.json());
+
+            if(weatherData.cod === `404`){
+                alert("Sorry, Location not found ⚠");
+                return;
+            }
+
+            temperature.innerHTML = `${Math.round(weatherData.main.temp - 273.15)}<sup>°C</sup>`;
+            descr.innerHTML = `${weatherData.weather[0].description}`;
+            humidity.innerHTML = `${weatherData.main.humidity}%`;
+            windSpeed.innerHTML = `${weatherData.wind.speed} Km/H`;
+
+            if(weatherData.weather[0].main == 'Clouds'){
+                weatherImg.src = "./Images/cloud.png"
+            }
+            else if(weatherData.weather[0].main == 'Clear'){
+                weatherImg.src = "./Images/clear.png"
+            }
+            else if(weatherData.weather[0].main == 'Rain'){
+                weatherImg.src = "./Images/rain.png"
+            }
+            else if(weatherData.weather[0].main == 'Mist'){
+                weatherImg.src = "./Images/mist.png"
+            }
+            else if(weatherData.weather[0].main == 'Snow'){
+                weatherImg.src = "./Images/snow.png"
+            }
+        }
+    </script>
+    <script src="https://kit.fontawesome.com/4a24678c16.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
